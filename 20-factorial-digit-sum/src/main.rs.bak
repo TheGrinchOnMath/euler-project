@@ -1,0 +1,26 @@
+use num_bigint::BigUint;
+
+fn main() {
+    println!("{}", sum_of_digits(factorial(100)));
+}
+
+fn factorial(num:i64) -> Vec<i64> {
+    let one = BigUint::from(1 as u8);
+    let mut res:BigUint = one.clone();
+    let mut _num = BigUint::from(num as u64);
+    while _num > one {
+        res *= _num.clone();
+    }
+     let num_arr:Vec<i64> = res.iter_u64_digits().map(|x| x as i64).collect();
+
+    return num_arr;
+    
+}
+
+fn sum_of_digits(arr:Vec<i64>) -> i64 {
+    let mut res = 0;
+    for n in arr {
+        res += n;
+    }
+    return res;
+}

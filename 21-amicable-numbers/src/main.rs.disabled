@@ -1,0 +1,61 @@
+fn main() {
+    println!("{:?}", amicable_numbers(10_000))
+}
+
+fn find_divisors(num: i32) -> Vec<i32> {
+    let root = (num as f32).sqrt() as i32 + 1;
+    let mut vec: Vec<i32> = Vec::new();
+    for n in 1..=root {
+        if num % n == 0 {
+            vec.push(n);
+            vec.push(num / n);
+        }
+    }
+    vec.sort();
+    vec.pop();
+    return vec;
+}
+
+fn amicable_numbers(ceil: i32) -> i32 {
+    let mut amicable_num_vec: Vec<i32> = vec![];
+
+    // iter from 2, to avoid 1 amicabling itself
+    for n in 2..=ceil {
+        // create divisor sum for number and possible amicable number
+        let amicable = find_divisors(n).iter().sum();
+        let amicable_div_sum = find_divisors(amicable).iter().sum();
+
+        if n == amicable_div_sum {
+            let n_index = amicable_num_vec.iter().position(|&x| x == n);
+            let amicable_index = amicable_num_vec.iter().position(|&x| x == amicable);
+            
+            if n_index == None {
+                amicable_num_vec.push(n);
+            }
+            if amicable_index == None {
+                amicable_num_vec.push(amicable);
+            }
+           
+        }
+    }
+    amicable_num_vec.sort();
+    amicable_num_vec.dedup();
+    println!("{:?}", amicable_num_vec);
+
+    // test amicable numbers, since something is not going as intended
+    
+
+
+
+    return amicable_num_vec.iter().sum();
+}
+
+/*
+
+fn divisor_sum(div_vec: Vec<i64>) {
+    let mut res:i64 = 0;
+    div_vec.into_iter().map(|i:i64| res += i);
+
+    println!("{}", res);
+}
+*/

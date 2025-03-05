@@ -1,0 +1,132 @@
+use std::iter::successors;
+
+fn main() {
+    let bignum: Vec<i64> = vec![
+        731671765313,
+        3062491922511,
+        967442657474,
+        2355349194934,
+        969835203127,
+        7450632623957,
+        831801698480,
+        1869478851843,
+        858615607891,
+        1294949545950,
+        173795833195,
+        2853208805511,
+        125406987471,
+        5852386305071,
+        569329096329,
+        5227443043557,
+        668966489504,
+        4524452316173,
+        185640309871,
+        1121722383113,
+        622298934233,
+        8030813533627,
+        661428280644,
+        4486645238749,
+        303589072962,
+        9049156044077,
+        239071381051,
+        5859307960866,
+        701724271218,
+        8399879790879,
+        227492190169,
+        9720888093776,
+        657273330010,
+        5336788122023,
+        542180975125,
+        4540594752243,
+        525849077116,
+        7055601360483,
+        958644670632,
+        4415722155397,
+        536978179778,
+        4617406495514,
+        929086256932,
+        1978468622482,
+        839722413756,
+        5705605749026,
+        140797296865,
+        2414535100474,
+        821663704844,
+        0319989000889,
+        524345065854,
+        1227588666881,
+        164271714799,
+        2444292823086,
+        346567481391,
+        9123162824586,
+        178664583591,
+        2456652947654,
+        568284891288,
+        3142607690042,
+        242190226710,
+        5562632111110,
+        937054421750,
+        6941658960408,
+        071984038509,
+        6245544436298,
+        123098787992,
+        7244284909188,
+        845801561660,
+        9791913387549,
+        920052406368,
+        9912560717606,
+        058861164671,
+        0940507754100,
+        225698315520,
+        0055935729725,
+        716362695618,
+        8267042825248,
+        360082325753,
+        0420752963450,
+    ];
+    let suite_len = 13;
+    let result = get_biggest_suite(bignum, suite_len);
+    println!("{}", result);
+    println!("{}", if result == 23514624000 {true} else {false})
+}
+
+fn get_biggest_suite(num_vec: Vec<i64>, suite_len: i64) -> i64 {
+    // create a new vector for every int in num_vec and
+    // separate all the digits into a new vector, then extend one vector to take them all
+    let mut num_arr: Vec<i64> = vec![];
+    for num in num_vec {
+        // create vec from int
+        let temp_vec = create_vec_from_num(num);
+        // append vec to the array
+        num_arr.extend(temp_vec);
+    }
+    // declare return variable
+    let mut final_factor: i64 = 0;
+    // iterate through num_arr using its indices
+    let iter_size = num_arr.len() - suite_len as usize;
+    for n in 0..iter_size {
+        let mut factor: i64 = 1;
+        for m in 0..=suite_len {
+            let index = n + m as usize;
+            factor *= num_arr[index];
+        }
+        final_factor = if factor > final_factor {
+            factor
+        } else {
+            final_factor
+        };
+    }
+    return final_factor;
+}
+
+fn create_vec_from_num(num: i64) -> Vec<i64> {
+    // credit: https://stackoverflow.com/a/69302957/23320053
+    // code for obtaining the amount of digits in an int
+    let mut arr: Vec<i64> = vec![];
+    let mut num: i64 = num;
+    let num_digit_count = successors(Some(num), |&num| (num >= 10).then(|| num / 10)).count();
+    for _ in 0..num_digit_count {
+        arr.push(num % 10);
+        num /= 10;
+    }
+    return arr;
+}
