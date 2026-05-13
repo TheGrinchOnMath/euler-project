@@ -1,10 +1,19 @@
 fn main() {
-    dfs();
+    bottom_up();
 }
 
-// BAD APPROACH, DOESN'T TAKE INTO ACCOUNT CERTAIN OPTIONS.
-
 fn dfs() {
+
+}
+
+fn preorder_graph() {
+
+}
+
+
+
+
+fn bottom_up() {
     // create vector of pyramid
     let path: Vec<Vec<u32>> = vec![
         vec![75],
@@ -26,7 +35,7 @@ fn dfs() {
 
     // create vector of longest row, to hold the sum for each starting point.
     let mut sum: Vec<u32> = path[path.len() - 1].iter().copied().collect();
-    let mut min_sum = u32::MAX;
+    let mut min_sum = 0u32;
 
     // iterate over starting_points
     for start_point in (0..sum.len()).rev() {
@@ -36,7 +45,7 @@ fn dfs() {
             &path,
             sum[start_point],
         );
-        min_sum = if sum[start_point] < min_sum {
+        min_sum = if sum[start_point] > min_sum {
             sum[start_point]
         } else {
             min_sum
@@ -73,11 +82,11 @@ fn recursive_sum(pos: (usize, usize), path: &Vec<Vec<u32>>, sum_prev: u32) -> u3
             let left = row_above[pos.0];
 
             // go left
-            if right > left {
+            if right < left {
                 recursive_sum((pos.0, pos.1 - 1), path, sum_prev + left)
             }
             // go right
-            else if right < left {
+            else if right > left {
                 recursive_sum((pos.0 - 1, pos.1 - 1), path, sum_prev + right)
             }
             // both options are identical in value.
@@ -90,7 +99,7 @@ fn recursive_sum(pos: (usize, usize), path: &Vec<Vec<u32>>, sum_prev: u32) -> u3
                 let option_2 = recursive_sum((pos.0, pos.1 - 1), path, right);
 
                 // left path smaller, so take it.
-                return if option_1 < option_2 {
+                return if option_1 > option_2 {
                     sum_prev + option_1
                 } else {
                     sum_prev + option_2
